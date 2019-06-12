@@ -19,40 +19,32 @@ However, the first one is lexicographically smaller.
 */
 
 const flights = (flights, destination) => {
+    if(flights === null || flights.length === 0 || destination === null) {
+        console.log("NO")
+    }
     let flightDict = {}
     for(let i = 0; i < flights.length; i++) {
 
         if (flightDict[flights[i][0]]) {
-            flightDict[flights[i][0]].add(flights[i][1]);
+            flightDict[flights[i][0]].push(flights[i][1]);
         } else {
-            flightDict[flights[i][0]] = new Set();
-            flightDict[flights[i][0]].add(flights[i][1]);
+            flightDict[flights[i][0]] = [];
+            flightDict[flights[i][0]].push(flights[i][1]);
         }
     }
 
-    flights = [];
-    if(!flightDict[destination]) {
-        console.log('NOPE');
-        return;
-    } else {
-        flights.push(destination);
+    for(let flight in flightDict) {
+        flightDict[flight].sort(function(a,b) {return a.localeCompare(b) * -1});
     }
 
-
-    while(flightDict[destination] && flightDict[destination].size > 0) {
-        let smallestLex = Infinity;
-        for(let v of flightDict[destination]) {
-            if(smallestLex === Infinity) {
-                smallestLex = v;
-            } else if (v.localeCompare(smallestLex) < 0) {
-                smallestLex = v;
-            }
-        }
-        flightDict[destination].delete(smallestLex);
-        destination = smallestLex;    
-        flights.push(destination);
+    let result = [];
+    result.push(destination);
+    while(flightDict[destination].length > 0) {
+        destination = flightDict[destination].pop();
+        result.push(destination);
     }
-    console.log(flights);
+    
+    console.log(result);
 }
 
 flights([['A', 'B'], ['A', 'C'], ['B', 'C'], ['C', 'A']], 'A');
