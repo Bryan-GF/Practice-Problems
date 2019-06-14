@@ -5,16 +5,20 @@ For example, given the set [1, 2, 3], it should return {{}, {1}, {2}, {3}, {1, 2
 
 You may also use a list or array to represent a set.
 */
-
 const powerSet = (arr) => {
-    let final = [[]];
-    for(let i = 0; i <= arr.length; i++) {
-        final.push(arr[i]);
-        let arrNew = [];    
-        for(let j = i; j <= arr.length; j++) {
-            arrNew.push(arr[j]);
+    let final = new Set();
+    final.add({});
+    const checkSet = (arr, position, set) => {
+        if(position >= arr.length -1) {
+            return;
         }
-        final.push(arrNew);
+        set.add(arr[position]);
+        final.add(set);
+        return checkSet(arr, position++, set);
     }
-    console.log(final);
+    checkSet(arr, 0, new Set());
+    console.log(arr);
 }
+
+
+powerSet([1,2,3]);
